@@ -4,7 +4,7 @@
 #
 Name     : ibus-table
 Version  : 1.5.0
-Release  : 1
+Release  : 2
 URL      : http://mfabian.fedorapeople.org/ibus-table/ibus-table-1.5.0.tar.gz
 Source0  : http://mfabian.fedorapeople.org/ibus-table/ibus-table-1.5.0.tar.gz
 Summary  : The Table engine for IBus platform
@@ -74,7 +74,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1536443805
+export SOURCE_DATE_EPOCH=1536448190
 %configure --disable-static
 make  %{?_smp_mflags}
 
@@ -86,7 +86,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1536443805
+export SOURCE_DATE_EPOCH=1536448190
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/doc/ibus-table
 cp COPYING %{buildroot}/usr/share/doc/ibus-table/COPYING

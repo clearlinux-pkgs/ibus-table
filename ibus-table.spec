@@ -4,7 +4,7 @@
 #
 Name     : ibus-table
 Version  : 1.9.14
-Release  : 5
+Release  : 6
 URL      : http://mfabian.fedorapeople.org/ibus-table/ibus-table-1.9.14.tar.gz
 Source0  : http://mfabian.fedorapeople.org/ibus-table/ibus-table-1.9.14.tar.gz
 Summary  : The Table engine for IBus platform

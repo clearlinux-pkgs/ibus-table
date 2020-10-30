@@ -4,17 +4,18 @@
 #
 Name     : ibus-table
 Version  : 1.9.14
-Release  : 6
+Release  : 7
 URL      : http://mfabian.fedorapeople.org/ibus-table/ibus-table-1.9.14.tar.gz
 Source0  : http://mfabian.fedorapeople.org/ibus-table/ibus-table-1.9.14.tar.gz
 Summary  : The Table engine for IBus platform
 Group    : Development/Tools
 License  : LGPL-2.1 LGPL-2.1+
-Requires: ibus-table-bin
-Requires: ibus-table-data
-Requires: ibus-table-license
-Requires: ibus-table-locales
-Requires: ibus-table-man
+Requires: ibus-table-bin = %{version}-%{release}
+Requires: ibus-table-data = %{version}-%{release}
+Requires: ibus-table-libexec = %{version}-%{release}
+Requires: ibus-table-license = %{version}-%{release}
+Requires: ibus-table-locales = %{version}-%{release}
+Requires: ibus-table-man = %{version}-%{release}
 BuildRequires : gettext
 BuildRequires : perl(XML::Parser)
 BuildRequires : pkgconfig(ibus-1.0)
@@ -25,9 +26,9 @@ The package contains general Table engine for IBus platform.
 %package bin
 Summary: bin components for the ibus-table package.
 Group: Binaries
-Requires: ibus-table-data
-Requires: ibus-table-license
-Requires: ibus-table-man
+Requires: ibus-table-data = %{version}-%{release}
+Requires: ibus-table-libexec = %{version}-%{release}
+Requires: ibus-table-license = %{version}-%{release}
 
 %description bin
 bin components for the ibus-table package.
@@ -44,12 +45,22 @@ data components for the ibus-table package.
 %package dev
 Summary: dev components for the ibus-table package.
 Group: Development
-Requires: ibus-table-bin
-Requires: ibus-table-data
-Provides: ibus-table-devel
+Requires: ibus-table-bin = %{version}-%{release}
+Requires: ibus-table-data = %{version}-%{release}
+Provides: ibus-table-devel = %{version}-%{release}
+Requires: ibus-table = %{version}-%{release}
 
 %description dev
 dev components for the ibus-table package.
+
+
+%package libexec
+Summary: libexec components for the ibus-table package.
+Group: Default
+Requires: ibus-table-license = %{version}-%{release}
+
+%description libexec
+libexec components for the ibus-table package.
 
 
 %package license
@@ -78,28 +89,37 @@ man components for the ibus-table package.
 
 %prep
 %setup -q -n ibus-table-1.9.14
+cd %{_builddir}/ibus-table-1.9.14
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1536470336
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1604095469
+export GCC_IGNORE_WERROR=1
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 %configure --disable-static
 make  %{?_smp_mflags}
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1536470336
+export SOURCE_DATE_EPOCH=1604095469
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/ibus-table
-cp COPYING %{buildroot}/usr/share/doc/ibus-table/COPYING
+mkdir -p %{buildroot}/usr/share/package-licenses/ibus-table
+cp %{_builddir}/ibus-table-1.9.14/COPYING %{buildroot}/usr/share/package-licenses/ibus-table/caeb68c46fa36651acf592771d09de7937926bb3
 %make_install
 %find_lang ibus-table
 
@@ -109,8 +129,6 @@ cp COPYING %{buildroot}/usr/share/doc/ibus-table/COPYING
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/ibus-table-createdb
-/usr/libexec/ibus-engine-table
-/usr/libexec/ibus-setup-table
 
 %files data
 %defattr(-,root,root,-)
@@ -152,12 +170,17 @@ cp COPYING %{buildroot}/usr/share/doc/ibus-table/COPYING
 %defattr(-,root,root,-)
 /usr/lib64/pkgconfig/ibus-table.pc
 
-%files license
+%files libexec
 %defattr(-,root,root,-)
-/usr/share/doc/ibus-table/COPYING
+/usr/libexec/ibus-engine-table
+/usr/libexec/ibus-setup-table
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/ibus-table/caeb68c46fa36651acf592771d09de7937926bb3
 
 %files man
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/man/man1/ibus-table-createdb.1
 
 %files locales -f ibus-table.lang
